@@ -6,7 +6,7 @@
  * @author
  *
  * Created at     : 2021-07-20 08:07:03
- * Last modified  : 2021-11-11 15:37:47
+ * Last modified  : 2021-11-11 16:07:20
  */
 
 const { app, Menu, Tray, dialog, BrowserWindow, ipcMain } = require("electron");
@@ -40,6 +40,7 @@ app.whenReady().then(() => {
           backgroundColor: "#282828",
           width: 600,
           height: 700,
+          icon: "./icon/icon.png",
         });
         settingsWindow.setMenuBarVisibility(false);
         settingsWindow.setBackgroundColor("#282828");
