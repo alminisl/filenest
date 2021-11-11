@@ -1,26 +1,2 @@
 {
-  "BASE_PATH": "C:\\Users\\Perun\\Downloads",
-  "DOCUMENTS_PATH": "C:\\Users\\Perun\\Downloads\\Documents",
-  "APPLICATION_PATH": "C:\\Users\\Perun\\Downloads\\Applications",
-  "IMAGES_PATH": "C:\\Users\\Perun\\Downloads\\Images",
-  "ARCHIVES_PATH": "C:\\Users\\Perun\\Downloads\\Archives",
-  "init": true,
-  "DOCUMENT_EXTENSIONS": [
-    ".docx",
-    ".doc"
-  ],
-  "APPLICATION_EXTENSIONS": [
-    ".msi",
-    ".exe"
-  ],
-  "IMAGES_EXTENSIONS": [
-    ".png",
-    ".jpg",
-    ".jpeg"
-  ],
-  "ARCHIVE_EXTENSIONS": [
-    ".zip",
-    ".rar",
-    ".7zip"
-  ]
 }
