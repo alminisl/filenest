@@ -55,7 +55,7 @@ When you right click on the tray icon you will get a menu:
 The menu options are the main way to interact with Filenest. The options meaning is as follows: 
 
 - Settings - Opens the settings menu
-    <img height="500" alt="HTTPie" src="./screenshot/../screenshots/settings.jpg" />
+<img height="500" alt="HTTPie" src="./screenshot/../screenshots/settings.jpg" />
     - settings menu offers you basic configuration for filenest
     - you can select which file extensions go in what folder 
 - Sort download folder - triggers the sort download folder function that applies the current settings
