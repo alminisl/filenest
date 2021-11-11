@@ -8,7 +8,7 @@
 
 *I organize your mess, so you don't have to!*
 
- <img height="500" alt="" src="./screenshots/sort.gif" />
+ <img height="" alt="" src="./screenshots/sort.gif" />
 ## Introduction
 
 Filenest is a small app I made using Electron. It's primarily usage is for me to learn how electron works and what I can do with it. The initial idea came from me, since I'm a data hoarder, and I download stuff all the time. I run into the problem that my download folder got cluttered with a bunch of fluff files. So the idea for Filenest started. 
