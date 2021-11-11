@@ -1,0 +1,21 @@
+{
+  "name": "File Nest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^12.0.9",
+    "electron-packager": "^15.3.0"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.1",
+    "move-file": "^2.0.0"
+  }
+}
