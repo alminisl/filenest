@@ -1,12 +1,14 @@
 <br/>
 <a href="" target="blank_">
-    <img height="100" alt="HTTPie" src="./icon/icon.png" />
+    <img height="100" alt="filenest" src="./icon/icon.png" />
 </a>
 <br/>
 
 # Filenest
 
 *I organize your mess, so you don't have to!*
+
+ <img height="500" alt="" src="./screenshots/sort.gif" />
 ## Introduction
 
 Filenest is a small app I made using Electron. It's primarily usage is for me to learn how electron works and what I can do with it. The initial idea came from me, since I'm a data hoarder, and I download stuff all the time. I run into the problem that my download folder got cluttered with a bunch of fluff files. So the idea for Filenest started. 
@@ -59,7 +61,7 @@ When you right click on the tray icon you will get a menu:
 The menu options are the main way to interact with Filenest. The options meaning is as follows: 
 
 - Settings - Opens the settings menu
-<img height="500" alt="HTTPie" src="./screenshot/../screenshots/settings.jpg" />
+<img height="500" alt="settings" src="./screenshot/../screenshots/settings.jpg" />
   - settings menu offers you basic configuration for filenest
   - you can select which file extensions go in what folder 
   
