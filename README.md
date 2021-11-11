@@ -49,7 +49,7 @@ and the app should be running on Windows in the tray.
 ⚠️ Installation files for all the systems should be available in  `Releases` once I Figure out how to build them.
 
 
-### Usage
+## Usage
 
 When you have started the project and you can see the Tray icon of filenest, it will automatically start the process of sorting files in the download folder so be aware of that! 
 
@@ -68,7 +68,7 @@ The menu options are the main way to interact with Filenest. The options meaning
 - Sort download folder - triggers the sort download folder function that applies the current settings
 - Watcher - toggle it on or off so the selected folder is being watched by filenest, adding/downloading new files results in triggering the sort function.
 
-### Roadmap
+## Roadmap
 
 - [ ] extend the settings to be more customizable 
 - [ ] UI/UX improvements
