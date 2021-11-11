@@ -33,7 +33,10 @@ npm install && npm start
 
 and the app should be running on Windows in the tray. 
 
-<img height="50" alt="HTTPie" src="./screenshot/../screenshots/tray.png" />
+<img height="100" alt="HTTPie" src="./screenshot/../screenshots/tray.png" />
+
+*Tray icon of filenest*
+
 
 *__(For Linux)__*
 ` Work in progress..`
@@ -56,8 +59,8 @@ The menu options are the main way to interact with Filenest. The options meaning
 
 - Settings - Opens the settings menu
 <img height="500" alt="HTTPie" src="./screenshot/../screenshots/settings.jpg" />
-    - settings menu offers you basic configuration for filenest
-    - you can select which file extensions go in what folder 
+  - settings menu offers you basic configuration for filenest
+  - you can select which file extensions go in what folder 
 - Sort download folder - triggers the sort download folder function that applies the current settings
 - Watcher - toggle it on or off so the selected folder is being watched by filenest, adding/downloading new files results in triggering the sort function.
 
