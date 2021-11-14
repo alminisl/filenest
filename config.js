@@ -7,25 +7,26 @@
  * @author
  *
  * Created at     : 2021-07-20 08:05:58
- * Last modified  : 2021-09-12 23:48:49
+ * Last modified  : 2021-11-14 21:03:37
  */
 
 const fs = require("fs");
 let config = (async () => loadConfigData())();
 console.log("Config loaded: ", config);
 
-//TODO: Load this on start to Config
-var downloadFolder = process.env.USERPROFILE + "\\Downloads";
-if (config.BASE_PATH === undefined && config.BASE_PATH !== "") {
-  BASE_PATH = downloadFolder;
-} else {
-  BASE_PATH = config.BASE_PATH;
-}
+let downloadPath;
+// check if windows or linux
+// if (process.platform === "win32") {
+//   downloadFolder = process.env.USERPROFILE + "\\Downloads";
+// } else {
+//   // linux
 
-if (!config.init) {
-  init();
-  saveToConfig(config);
-}
+// }
+
+// if (!config.init) {
+//   init();
+//   saveToConfig(config);
+// }
 
 function saveToConfig(newConfig) {
   console.log("Save to config", newConfig);
@@ -76,9 +77,26 @@ async function loadConfigData() {
   return JSON.parse(rawdata);
 }
 
+function setDownloadPath(path) {
+  console.log("Path", path);
+  let downloadFolder;
+  if (process.platform === "win32") {
+    downloadFolder = path + "\\Downloads";
+  } else {
+    //Todo: add path for linux
+  }
+
+  if (config.BASE_PATH === undefined && config.BASE_PATH !== "") {
+    BASE_PATH = downloadFolder;
+  } else {
+    BASE_PATH = config.BASE_PATH;
+  }
+}
+
 module.exports = {
   init,
   updateConfig,
   saveToConfig,
   config,
+  setDownloadPath,
 };
