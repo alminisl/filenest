@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "build": "electron-packager . --platform=win32 --arch=x64 ../filenest-installers --prune --all --overwrite --icon=./icon/icon.ico",
-    "make-mac": "electron-forge make --platform darwin"
+    "make-mac": "electron-forge make --platform darwin",
+    "make-linux": "electron-packager . Filenest --platform linux --arch x64 --out dist/",
+    "deb64": "electron-installer-debian --src dist/app-linux-x64/ --dest dist/installers/ --arch amd64"
   },
   "keywords": [],
   "author": "",
