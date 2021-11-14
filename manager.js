@@ -4,15 +4,15 @@
  * @summary Manager file
  * @author
  * Created at     : 2021-07-20 08:07:52
- * Last modified  : 2021-09-05 21:45:49
+ * Last modified  : 2021-11-14 22:24:14
  */
 
-const path = require("path");
+const { extname, join } = require("path");
 const fs = require("fs");
 const moveFile = require("move-file");
 const chokidar = require("chokidar");
-const { config } = require("./config");
-
+const { config, filePathFormat } = require("./config");
+const filePath = filePathFormat();
 function watcher() {
   var watcher = chokidar.watch(BASE_PATH).on("all", (event, path) => {
     // console.log("init Watcher");
@@ -47,76 +47,80 @@ function stopWatcher(watcher) {
 function findAllMovableFiles() {
   fs.readdir(config.BASE_PATH, async function (err, files) {
     //Refacotr so its only one function
-    const txtFiles = files.filter((el) =>
-      config.DOCUMENT_EXTENSIONS.find(
-        (extension) => path.extname(el) === extension
-      )
-    );
-
-    const appFiles = files.filter((el) =>
-      config.APPLICATION_EXTENSIONS.find(
-        (extension) => path.extname(el) === extension
-      )
-    );
-
-    const imageFiles = files.filter((el) =>
-      config.IMAGES_EXTENSIONS.find(
-        (extension) => path.extname(el) === extension
-      )
-    );
-
-    const archiveFiles = files.filter((el) =>
-      config.ARCHIVE_EXTENSIONS.find(
-        (extension) => path.extname(el) === extension
-      )
-    );
-
-    // Check if directory is available
-    const PATHS = [
-      config.DOCUMENTS_PATH,
-      config.APPLICATION_PATH,
-      config.IMAGES_PATH,
-      config.ARCHIVES_PATH,
-    ];
-    PATHS.forEach((dir) => {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-    });
-
-    //move app files
-    appFiles.forEach(async (file) => {
-      await moveFile(
-        config.BASE_PATH + "\\" + file,
-        config.APPLICATION_PATH + "\\" + file
+    try {
+      const txtFiles = files.filter((el) =>
+        config.DOCUMENT_EXTENSIONS.find(
+          (extension) => extname(el) === extension
+        )
       );
-      console.log("Moved Apps");
-    });
 
-    // move text files
-    txtFiles.forEach(async (file) => {
-      await moveFile(
-        config.BASE_PATH + "\\" + file,
-        config.DOCUMENTS_PATH + "/" + file
+      const appFiles = files.filter((el) =>
+        config.APPLICATION_EXTENSIONS.find(
+          (extension) => extname(el) === extension
+        )
       );
-      console.log("Moved Text");
-    });
 
-    imageFiles.forEach(async (file) => {
-      await moveFile(
-        config.BASE_PATH + "\\" + file,
-        config.IMAGES_PATH + "/" + file
+      const imageFiles = files.filter((el) =>
+        config.IMAGES_EXTENSIONS.find((extension) => extname(el) === extension)
       );
-      console.log("Moved Images");
-    });
 
-    archiveFiles.forEach(async (file) => {
-      await moveFile(
-        config.BASE_PATH + "\\" + file,
-        config.ARCHIVES_PATH + "/" + file
+      const archiveFiles = files.filter((el) =>
+        config.ARCHIVE_EXTENSIONS.find((extension) => extname(el) === extension)
       );
-      console.log("Moved Archives");
-    });
+
+      // Check if directory is available
+      const PATHS = [
+        config.DOCUMENTS_PATH,
+        config.APPLICATION_PATH,
+        config.IMAGES_PATH,
+        config.ARCHIVES_PATH,
+      ];
+      PATHS.forEach((dir) => {
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir);
+        }
+      });
+
+      //move app files
+      appFiles.forEach(async (file) => {
+        await moveFile(
+          join(config.BASE_PATH, file),
+          join(config.APPLICATION_PATH, file)
+        );
+        console.log("Moved Apps");
+      });
+
+      // move text files
+      txtFiles.forEach(async (file) => {
+        await moveFile(
+          join(config.BASE_PATH, file),
+          join(config.DOCUMENTS_PATH, file)
+        );
+        console.log("Moved Text");
+      });
+
+      imageFiles.forEach(async (file) => {
+        await moveFile(
+          join(config.BASE_PATH, file),
+          join(config.IMAGES_PATH, file)
+        );
+        console.log("Moved Images");
+      });
+
+      archiveFiles.forEach(async (file) => {
+        try {
+          await moveFile(
+            join(config.BASE_PATH, file),
+            join(config.ARCHIVES_PATH, file)
+          );
+          console.log("Moved Archive");
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   });
 }
 

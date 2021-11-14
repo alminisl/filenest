@@ -6,7 +6,7 @@
  * @author
  *
  * Created at     : 2021-07-20 08:07:03
- * Last modified  : 2021-11-14 21:01:20
+ * Last modified  : 2021-11-14 21:59:43
  */
 
 const { app, Menu, Tray, dialog, BrowserWindow, ipcMain } = require("electron");
@@ -34,9 +34,8 @@ let settingsWindow;
 try {
   app.whenReady().then(() => {
     const icon = "/icon/icon.png";
-    const path = app.getAppPath();
-    tray = new Tray(path + icon);
-    setDownloadPath(app.getPath("home"));
+    const pathToIcon = app.getAppPath();
+    tray = new Tray(pathToIcon + icon);
     init();
 
     const contextMenu = Menu.buildFromTemplate([

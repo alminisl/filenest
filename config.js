@@ -7,12 +7,31 @@
  * @author
  *
  * Created at     : 2021-07-20 08:05:58
- * Last modified  : 2021-11-14 21:04:17
+ * Last modified  : 2021-11-14 22:14:34
  */
 
 const fs = require("fs");
+const { app } = require("electron");
 let config = (async () => loadConfigData())();
 console.log("Config loaded: ", config);
+
+let isWindows = false;
+let downloadFolder = setDownloadPath(app.getPath("home"));
+if (config.BASE_PATH === undefined && config.BASE_PATH !== "") {
+  BASE_PATH = downloadFolder;
+} else {
+  BASE_PATH = config.BASE_PATH;
+}
+
+// Check if the system is windows or not, return correct path prefix
+function filePathFormat() {
+  return isWindows ? "\\" : "/";
+}
+
+if (!config.init) {
+  init();
+  saveToConfig(config);
+}
 
 function saveToConfig(newConfig) {
   console.log("Save to config", newConfig);
@@ -33,11 +52,13 @@ function updateConfig(key, value) {
 }
 
 function init() {
+  console.log("Init func", config.BASE_PATH);
+  const filePath = filePathFormat();
   config.BASE_PATH = BASE_PATH;
-  config.DOCUMENTS_PATH = BASE_PATH + "\\" + "Documents";
-  config.APPLICATION_PATH = BASE_PATH + "\\" + "Applications";
-  config.IMAGES_PATH = BASE_PATH + "\\" + "Images";
-  config.ARCHIVES_PATH = BASE_PATH + "\\" + "Archives";
+  config.DOCUMENTS_PATH = BASE_PATH + filePath + "Documents";
+  config.APPLICATION_PATH = BASE_PATH + filePath + "Applications";
+  config.IMAGES_PATH = BASE_PATH + filePath + "Images";
+  config.ARCHIVES_PATH = BASE_PATH + filePath + "Archives";
   config.init = true;
 
   config.DOCUMENT_EXTENSIONS = [".docx", ".doc"];
@@ -68,15 +89,13 @@ function setDownloadPath(path) {
   let downloadFolder;
   if (process.platform === "win32") {
     downloadFolder = path + "\\Downloads";
+    isWindows = true;
   } else {
     //Todo: add path for linux
+    downloadFolder = path + "/Downloads";
   }
 
-  if (config.BASE_PATH === undefined && config.BASE_PATH !== "") {
-    BASE_PATH = downloadFolder;
-  } else {
-    BASE_PATH = config.BASE_PATH;
-  }
+  return downloadFolder;
 }
 
 module.exports = {
@@ -85,4 +104,5 @@ module.exports = {
   saveToConfig,
   config,
   setDownloadPath,
+  filePathFormat,
 };
