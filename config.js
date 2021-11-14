@@ -7,26 +7,12 @@
  * @author
  *
  * Created at     : 2021-07-20 08:05:58
- * Last modified  : 2021-11-14 21:03:37
+ * Last modified  : 2021-11-14 21:04:17
  */
 
 const fs = require("fs");
 let config = (async () => loadConfigData())();
 console.log("Config loaded: ", config);
-
-let downloadPath;
-// check if windows or linux
-// if (process.platform === "win32") {
-//   downloadFolder = process.env.USERPROFILE + "\\Downloads";
-// } else {
-//   // linux
-
-// }
-
-// if (!config.init) {
-//   init();
-//   saveToConfig(config);
-// }
 
 function saveToConfig(newConfig) {
   console.log("Save to config", newConfig);
