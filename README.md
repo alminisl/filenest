@@ -9,6 +9,7 @@
 *I organize your mess, so you don't have to!*
 
  <img height="" alt="" src="./screenshots/sort.gif" />
+
 ## Introduction
 
 Filenest is a small app I made using Electron. It's primarily usage is for me to learn how electron works and what I can do with it. The initial idea came from me, since I'm a data hoarder, and I download stuff all the time. I run into the problem that my download folder got cluttered with a bunch of fluff files. So the idea for Filenest started. 
@@ -40,13 +41,15 @@ and the app should be running on Windows in the tray.
 
 *Tray icon of filenest*
 
+In the releases you can also find a simple installation `exe` file for Windows. 
 
 *__(For Linux)__*
-` Work in progress..`
+
+Releases contains a `deb` file and should be simple enough to use it. 
+
 *__(For Mac)__*
 ` Work in progress, don't have a mac so will take some time `
 
-⚠️ Installation files for all the systems should be available in  `Releases` once I Figure out how to build them.
 
 
 ## Usage
@@ -62,11 +65,13 @@ The menu options are the main way to interact with Filenest. The options meaning
 
 - Settings - Opens the settings menu
 <img height="500" alt="settings" src="./screenshot/../screenshots/settings.jpg" />
+
   - settings menu offers you basic configuration for filenest
+  
   - you can select which file extensions go in what folder 
   
 - Sort download folder - triggers the sort download folder function that applies the current settings
-- Watcher - toggle it on or off so the selected folder is being watched by filenest, adding/downloading new files results in triggering the sort function.
+- Watcher - toggle it on or off so the selected folder is being watched by filenest, adding/downloading new files results in triggering the sort function.  __(Currently a bit buggy)__
 
 ## Roadmap
 

@@ -6,13 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-packager ./ --platform=win32 --arch=x64 filenest-installers --prune --overwrite --icon=./icon/icon.ico"
+    "build": "electron-packager . --platform=win32 --arch=x64 ../filenest-installers --prune --all --overwrite --icon=./icon/icon.ico",
+    "make-mac": "electron-forge make --platform darwin",
+    "make-linux": "electron-packager . Filenest --platform linux --arch x64 --out dist/",
+    "deb64": "electron-installer-debian --src dist/app-linux-x64/ --dest dist/installers/ --arch amd64"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^12.0.9",
+    "electron": ">=12.1.0",
     "electron-packager": "^15.3.0",
     "electron-wix-msi": "^3.2.0"
   },

@@ -6,7 +6,7 @@
  * @author
  *
  * Created at     : 2021-07-20 08:07:03
- * Last modified  : 2021-11-12 10:50:36
+ * Last modified  : 2021-11-14 21:59:43
  */
 
 const { app, Menu, Tray, dialog, BrowserWindow, ipcMain } = require("electron");
@@ -15,9 +15,8 @@ const url = require("url");
 const manager = require("./manager");
 const log = require("electron-log");
 
-const { config, init, saveToConfig } = require("./config");
+const { config, init, saveToConfig, setDownloadPath } = require("./config");
 const { settings } = require("cluster");
-init();
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
@@ -34,9 +33,10 @@ let settingsWindow;
 
 try {
   app.whenReady().then(() => {
-    const icon = "./icon/icon.png";
-    const path = app.getAppPath();
-    tray = new Tray(path + "/icon/icon.png");
+    const icon = "/icon/icon.png";
+    const pathToIcon = app.getAppPath();
+    tray = new Tray(pathToIcon + icon);
+    init();
 
     const contextMenu = Menu.buildFromTemplate([
       {
