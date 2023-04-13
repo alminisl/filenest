@@ -1,3 +1,5 @@
+<html>
+
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./settings.css">
@@ -6,28 +8,51 @@
 
 <body class="bg-gray-200">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold">
-            Settings
-        </h1>
-
-        <div style="p-4 bg-white rounded-lg shadow-lg">
-            <!-- <div>
-            <small><i>Please note: Adding extensions should be done with separating "," and must include a
-                    "." before it (example: .pdf, .doc..)</i></small>
-        </div> -->
+        <h1 class="text-2xl font-bold mb-4">Settings</h1>
+        <div id="toast"></div>
 
 
+        <div style="p-4 rounded-lg shadow-lg">
             <div class="grid gap-8 md:grid-cols-3">
-                <h1 class="text-2xl font-bold mb-4">Set the path:</h1>
+                <h1 class="text-l font-bold mb-2">Configure the paths:</h1>
                 <div id="pathFields">
                     <!-- Add Path Fields Here -->
                 </div>
-                <h1 class="text-2xl font-bold mb-4">Set the extensions:</h1>
+
                 <hr class="border-t-2 border-gray-400 mb-4">
 
+                <h1 class="text-l font-bold mb-2">Configure the extensions:</h1>
                 <div id="extensionFields">
                     <!-- Add Extension Fields Here -->
                 </div>
+            </div>
+        </div>
+        <div class="text-center my-2">
+            <button class="inline-block px-3 text-white text-sm font-medium bg-green-500 rounded-lg "
+                id="toggle-button">
+                Add new folder
+            </button>
+        </div>
+
+        <div id="form-container" class="hidden">
+            <div class="grid gap-2 md:gap-6 md:grid-cols-2 items-center p-5">
+                <label class="block text-sm font-medium">Add Path:</label>
+                <input type="text" id="newPath"
+                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder="Enter new path">
+            </div>
+            <div class="grid gap-2 md:gap-6 md:grid-cols-2 items-center p-5">
+                <label class="block text-sm font-medium">Add Extension:</label>
+                <input type="text" id="newExtension"
+                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder="Enter new extension">
+            </div>
+            <div class="mt-2">
+                <button
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
+                    onclick="add()">
+                    Add new folder
+                </button>
             </div>
         </div>
         <div class="mt-8">
@@ -40,9 +65,19 @@
         </div>
     </div>
 
+
+    </div>
+
+
     <script>
         const electron = require('electron');
         const { ipcRenderer } = electron;
+        const button = document.getElementById('toggle-button');
+        const formContainer = document.getElementById('form-container');
+
+        button.addEventListener('click', () => {
+            formContainer.classList.toggle('hidden');
+        });
 
         function addPathFields(config) {
             const pathFields = document.getElementById("pathFields");
@@ -71,29 +106,131 @@
             }
         }
 
-        function addExtensionsFields(arg) {
+        function addExtensionsFields(config) {
             const extensionFields = document.getElementById("extensionFields");
 
+            for (const pathName in config) {
+                if (config.hasOwnProperty(pathName)) {
+                    const path = config[pathName];
+
+                    const field = document.createElement("div");
+                    field.classList.add("grid", "gap-2", "md:gap-6", "md:grid-cols-2", "items-center");
+                    field.style.padding = "5px";
+
+                    const label = document.createElement("label");
+                    label.classList.add("block", "text-sm", "font-medium");
+                    label.textContent = `${pathName} Path: `;
+                    field.appendChild(label);
+
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.value = path;
+                    input.classList.add("bg-gray-100", "border", "border-gray-300", "text-gray-900", "text-sm", "rounded-lg", "focus:ring-blue-500", "focus:border-blue-500", "block", "w-full", "p-2.5")
+                    input.id = `${pathName.toLowerCase()}path`;
+                    field.appendChild(input);
+                    extensionFields.appendChild(field);
+                }
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.textContent = message;
+            toast.style.position = "fixed";
+            toast.style.top = "50%";
+            toast.style.left = "50%";
+            toast.style.transform = "translate(-50%, -50%)";
+            toast.style.padding = "10px";
+            toast.style.background = "#000";
+            toast.style.color = "#fff";
+            toast.style.borderRadius = "5px";
+            toast.style.opacity = 0.7;
+            toast.style.zIndex = 999;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 3000);
+        }
+
+        function add() {
+            const newPath = document.getElementById("newPath").value;
+            const newExtension = document.getElementById("newExtension").value;
+
+            if (!newPath || !newExtension) {
+                showToast("Please fill in both the path and extension fields.");
+                return;
+            }
+
+            const pathFields = document.getElementById("pathFields");
+            const extensionFields = document.getElementById("extensionFields");
+
+            const newField = document.createElement("div");
+            newField.classList.add("grid", "gap-2", "md:gap-6", "md:grid-cols-2", "items-center");
+            newField.style.padding = "5px";
+
+            const newPathLabel = document.createElement("label");
+            newPathLabel.classList.add("block", "text-sm", "font-medium");
+            newPathLabel.textContent = "New Path: ";
+            newField.appendChild(newPathLabel);
+
+            const newPathInput = document.createElement("input");
+            newPathInput.type = "text";
+            newPathInput.value = newPath;
+            newPathInput.classList.add("bg-gray-100", "border", "border-gray-300", "text-gray-900", "text-sm", "rounded-lg", "focus:ring-blue-500", "focus:border-blue-500", "block", "w-full", "p-2.5")
+            newField.appendChild(newPathInput);
+
+            const newExtensionField = document.createElement("div");
+            newExtensionField.classList.add("grid", "gap-2", "md:gap-6", "md:grid-cols-2", "items-center");
+            newExtensionField.style.padding = "5px";
+
+            const newExtensionLabelField = document.createElement("label");
+            newExtensionLabelField.classList.add("block", "text-sm", "font-medium");
+            newExtensionLabelField.textContent = "New Extension: ";
+            newExtensionField.appendChild(newExtensionLabelField);
+
+            const newExtensionInputField = document.createElement("input");
+            newExtensionInputField.type = "text";
+            newExtensionInputField.value = newExtension;
+            newExtensionInputField.classList.add("bg-gray-100", "border", "border-gray-300", "text-gray-900", "text-sm", "rounded-lg", "focus:ring-blue-500", "focus:border-blue-500", "block", "w-full", "p-2.5")
+            newExtensionField.appendChild(newExtensionInputField);
+
+            pathFields.appendChild(newField);
+            extensionFields.appendChild(newExtensionField);
+
+            showToast("New path and extension added.")
+            document.getElementById("newPath").value = "";
+            document.getElementById("newExtension").value = "";
         }
 
         function save() {
-            const pathsAndExt = {
-                ImagesPath: ImagesPath.value,
-                ArchivePath: ArchivePath.value,
-                basePathSetting: basePathSetting.value,
-                ApplicationPath: ApplicationPath.value,
-                DocumentPath: DocumentPath.value,
-                documentX: documentX.map(x => x.trim().replace(/\s/g, '')),
-                applicationX: applicationX.map(x => x.trim().replace(/\s/g, '')),
-                imageX: imageX.map(x => x.trim().replace(/\s/g, '')),
-                archiveX: archiveX.map(x => x.trim().replace(/\s/g, '')),
+            const pathFields = document.getElementById("pathFields").children;
+            const extensionFields = document.getElementById("extensionFields").children;
+
+            const paths = {};
+            const extensions = {};
+
+            for (const field of pathFields) {
+                const label = field.querySelector("label");
+                const input = field.querySelector("input");
+
+                const pathName = label.textContent.replace(" Path: ", "");
+                paths[pathName] = input.value;
             }
 
-            const message = document.querySelector("#message")
-            message.style.color = "green"
-            message.innerHTML = "Successfully Saved!"
-            setTimeout(function () { message.style.display = "none" }, 5000)
+            for (const field of extensionFields) {
+                const label = field.querySelector("label");
+                const input = field.querySelector("input");
+
+                const extension = label.textContent.replace(" Extension: ", "");
+                extensions[extension] = input.value;
+            }
+
+            showToast("Settings saved.")
             ipcRenderer.send("saveToConfig", pathsAndExt);
+            // ipcRenderer.send("save-settings", paths, extensions);
+
         }
 
         //onLoad event
@@ -103,7 +240,7 @@
         ipcRenderer.send('onload-paths', 'Load paths..')
 
         ipcRenderer.on("reply-extensions", (event, arg) => {
-            addPathFields(arg)
+            addExtensionsFields(arg)
         })
         ipcRenderer.send('onload-extensions', 'Load extensions..')
 
