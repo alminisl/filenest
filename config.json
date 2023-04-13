@@ -1,3 +1,26 @@
 {
-
+  "BASE_PATH": "/Users/isa1wi/Downloads",
+  "DOCUMENTS_PATH": "/Users/isa1wi/Downloads/Documents",
+  "APPLICATION_PATH": "/Users/isa1wi/Downloads/Applications",
+  "IMAGES_PATH": "/Users/isa1wi/Downloads/Images",
+  "ARCHIVES_PATH": "/Users/isa1wi/Downloads/Archives",
+  "init": true,
+  "DOCUMENT_EXTENSIONS": [
+    ".docx",
+    ".doc"
+  ],
+  "APPLICATION_EXTENSIONS": [
+    ".msi",
+    ".exe"
+  ],
+  "IMAGES_EXTENSIONS": [
+    ".png",
+    ".jpg",
+    ".jpeg"
+  ],
+  "ARCHIVE_EXTENSIONS": [
+    ".zip",
+    ".rar",
+    ".7zip"
+  ]
 }

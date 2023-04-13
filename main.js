@@ -6,10 +6,18 @@
  * @author
  *
  * Created at     : 2021-07-20 08:07:03
- * Last modified  : 2021-11-14 21:59:43
+ * Last modified  : 2023-04-13 13:36:20
  */
 
-const { app, Menu, Tray, dialog, BrowserWindow, ipcMain } = require("electron");
+const {
+  app,
+  Menu,
+  Tray,
+  dialog,
+  BrowserWindow,
+  ipcMain,
+  nativeImage,
+} = require("electron");
 const path = require("path");
 const url = require("url");
 const manager = require("./manager");
@@ -35,7 +43,12 @@ try {
   app.whenReady().then(() => {
     const icon = "/icon/icon.png";
     const pathToIcon = app.getAppPath();
-    tray = new Tray(pathToIcon + icon);
+    if (process.platform === "win32") {
+      tray = new Tray(pathToIcon + icon);
+    } else {
+      const image = nativeImage.createFromPath(pathToIcon + icon);
+      tray = new Tray(image.resize({ width: 16, height: 16 }));
+    }
     init();
 
     const contextMenu = Menu.buildFromTemplate([
