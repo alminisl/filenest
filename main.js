@@ -6,7 +6,7 @@
  * @author
  *
  * Created at     : 2021-07-20 08:07:03
- * Last modified  : 2023-04-13 15:14:55
+ * Last modified  : 2023-04-13 18:03:21
  */
 
 const {
@@ -110,37 +110,12 @@ try {
             event.reply("reply-extensions", extensions);
           });
 
-          ipcMain.on("saveToConfig", async function (event, arg) {
-            config.BASE_PATH = arg.basePathSetting;
-            config.DOCUMENTS_PATH = arg.DocumentPath;
-            config.APPLICATION_PATH = arg.ApplicationPath;
-            config.IMAGES_PATH = arg.ImagesPath;
-            config.ARCHIVES_PATH = arg.ArchivePath;
+          ipcMain.on("saveToConfig", async function (event, paths, extensions) {
+            console.log("SaveToConfig: ", paths, extensions);
+            // savetoConfig(arg);
 
-            config.DOCUMENT_EXTENSIONS = arg.documentX;
-            config.APPLICATION_EXTENSIONS = arg.applicationX;
-            config.IMAGES_EXTENSIONS = arg.imageX;
-            config.ARCHIVE_EXTENSIONS = arg.archiveX;
-
-            saveToConfig(config);
-
-            const paths = {
-              basePath: config.BASE_PATH,
-              documentsPath: config.DOCUMENTS_PATH,
-              applicationPath: config.APPLICATION_PATH,
-              imagesPath: config.IMAGES_PATH,
-              archivesPath: config.ARCHIVES_PATH,
-            };
-
-            const extensions = {
-              documentExtensions: config.DOCUMENT_EXTENSIONS,
-              applicationextensions: config.APPLICATION_EXTENSIONS,
-              imagesExtensions: config.IMAGES_EXTENSIONS,
-              archiveExtensions: config.ARCHIVE_EXTENSIONS,
-            };
-
-            event.reply("reply-paths", paths);
-            event.reply("reply-extensions", extensions);
+            // event.reply("reply-paths", paths);
+            // event.reply("reply-extensions", extensions);
           });
         },
       },

@@ -119,7 +119,7 @@
 
                     const label = document.createElement("label");
                     label.classList.add("block", "text-sm", "font-medium");
-                    label.textContent = `${pathName} Path: `;
+                    label.textContent = `${pathName}`;
                     field.appendChild(label);
 
                     const input = document.createElement("input");
@@ -228,7 +228,7 @@
             }
 
             showToast("Settings saved.")
-            ipcRenderer.send("saveToConfig", pathsAndExt);
+            ipcRenderer.send("saveToConfig", paths, extensions);
             // ipcRenderer.send("save-settings", paths, extensions);
 
         }
