@@ -6,7 +6,7 @@
  * @author
  *
  * Created at     : 2021-07-20 08:07:03
- * Last modified  : 2023-04-13 13:36:20
+ * Last modified  : 2023-04-13 15:14:55
  */
 
 const {
@@ -61,13 +61,11 @@ try {
               nodeIntegration: true,
               contextIsolation: false,
             },
-            backgroundColor: "#282828",
             width: 600,
             height: 700,
             icon: "./icon/icon.png",
           });
           settingsWindow.setMenuBarVisibility(false);
-          settingsWindow.setBackgroundColor("#282828");
           settingsWindow.on("close", function (event) {
             if (!app.isQuiting) {
               event.preventDefault();
@@ -90,34 +88,26 @@ try {
           );
 
           ipcMain.on("onload-paths", (event, arg) => {
-            const paths = {
-              basePath: config.BASE_PATH,
-              documentsPath: config.DOCUMENTS_PATH,
-              applicationPath: config.APPLICATION_PATH,
-              imagesPath: config.IMAGES_PATH,
-              archivesPath: config.ARCHIVES_PATH,
-            };
+            const paths = {};
+            for (const [key, value] of Object.entries(config)) {
+              if (key.includes("PATH")) {
+                paths[key] = value;
+              }
+            }
+            console.log("*****PathsToRender: ", paths);
             event.reply("reply-paths", paths);
           });
 
           ipcMain.on("onload-extensions", (event, arg) => {
-            const extensions = {
-              documentExtensions: config.DOCUMENT_EXTENSIONS,
-              applicationextensions: config.APPLICATION_EXTENSIONS,
-              imagesExtensions: config.IMAGES_EXTENSIONS,
-              archiveExtensions: config.ARCHIVE_EXTENSIONS,
-            };
+            const extensions = {};
+            for (const [key, value] of Object.entries(config)) {
+              if (key.includes("EXTENSIONS")) {
+                extensions[key] = value;
+              }
+            }
+
             console.log("Extensions: ", extensions);
             event.reply("reply-extensions", extensions);
-          });
-
-          ipcMain.on("selectDirectory", async function (event, arg) {
-            dir = dialog.showOpenDialog(settingsWindow, {
-              properties: ["openDirectory"],
-            });
-
-            const selectedDir = await dir;
-            event.reply("newMainFolder", selectedDir.filePaths[0]);
           });
 
           ipcMain.on("saveToConfig", async function (event, arg) {

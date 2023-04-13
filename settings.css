@@ -1,6 +1,5 @@
 body {
   margin-top: 20px;
-  color: #bcd0f7;
 }
 .account-settings .user-profile {
   margin: 0 0 1rem 0;
@@ -31,7 +30,6 @@ body {
   text-align: center;
 }
 .card {
-  background: #272e48;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -39,15 +37,12 @@ body {
   margin-bottom: 1rem;
 }
 .form-control {
-  border: 1px solid #596280;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
   font-size: 0.825rem;
-  background: #1a233a;
-  color: #bcd0f7;
 }
 
 html {
-  background-color: #282828 !important;
+  background-color: wheat !important;
 }

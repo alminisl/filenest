@@ -7,13 +7,13 @@
  * @author
  *
  * Created at     : 2021-07-20 08:05:58
- * Last modified  : 2021-11-14 22:14:34
+ * Last modified  : 2023-04-13 14:00:35
  */
 
 const fs = require("fs");
 const { app } = require("electron");
 let config = (async () => loadConfigData())();
-console.log("Config loaded: ", config);
+// console.log("Config loaded: ", config);
 
 let isWindows = false;
 let downloadFolder = setDownloadPath(app.getPath("home"));
@@ -34,7 +34,7 @@ if (!config.init) {
 }
 
 function saveToConfig(newConfig) {
-  console.log("Save to config", newConfig);
+  // console.log("Save to config", newConfig);
   fs.writeFile(
     "./config.json",
     JSON.stringify(newConfig, null, 2),

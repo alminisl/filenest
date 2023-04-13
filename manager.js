@@ -4,7 +4,7 @@
  * @summary Manager file
  * @author
  * Created at     : 2021-07-20 08:07:52
- * Last modified  : 2021-11-14 22:24:14
+ * Last modified  : 2023-04-13 14:10:00
  */
 
 const { extname, join } = require("path");
@@ -21,20 +21,20 @@ function watcher() {
   //Setup Watcher
   watcher
     .on("add", function (BASE_PATH) {
-      console.log("File", BASE_PATH, "has been added");
+      // console.log("File", BASE_PATH, "has been added");
       findAllMovableFiles();
     })
     .on("change", function (BASE_PATH) {
-      console.log("File", BASE_PATH, "has been changed");
+      // console.log("File", BASE_PATH, "has been changed");
     })
     .on("unlink", function (BASE_PATH) {
-      console.log("File", BASE_PATH, "has been removed");
+      // console.log("File", BASE_PATH, "has been removed");
     })
     .on("error", function (error) {
       console.error("Error happened", error);
     })
     .on("change", (BASE_PATH, stats) => {
-      if (stats) console.log(`File ${BASE_PATH} changed size to ${stats.size}`);
+      // if (stats) console.log(`File ${BASE_PATH} changed size to ${stats.size}`);
     });
 
   return watcher;
