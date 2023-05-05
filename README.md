@@ -6,11 +6,12 @@
 
 # Filenest
 
+# Note: New version using Tauri (Rust) is in the works, soon to release the first version. 
+
 *I organize your mess, so you don't have to!*
 
  <img height="" alt="" src="./screenshots/sort.gif" />
 
-# Note: New version using Tauri (Rust) is in the works, soon to release the first version. 
 
 ## Introduction
 
