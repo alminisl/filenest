@@ -1,28 +1,29 @@
 {
-  "name": "Filenest",
-  "version": "1.0.0",
-  "description": "Filenest description",
-  "main": "main.js",
+  "name": "tauri-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "build": "electron-packager . --platform=win32 --arch=x64 ../filenest-installers --prune --all --overwrite --icon=./icon/icon.ico",
-    "make-mac": "electron-forge make --platform darwin",
-    "make-linux": "electron-packager . Filenest --platform linux --arch x64 --out dist/",
-    "deb64": "electron-installer-debian --src dist/app-linux-x64/ --dest dist/installers/ --arch amd64"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "electron": ">=12.1.0",
-    "electron-packager": "^15.3.0",
-    "electron-wix-msi": "^3.2.0"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
   },
   "dependencies": {
-    "chokidar": "^3.5.1",
-    "electron-log": "^4.4.1",
-    "electron-squirrel-startup": "^1.0.0",
-    "move-file": "^2.0.0"
+    "@tauri-apps/api": "^1.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.3.0",
+    "@types/node": "^18.7.10",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^3.0.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^4.9.5",
+    "vite": "^4.2.1"
   }
 }
