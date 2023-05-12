@@ -6,9 +6,6 @@ use serde::{ Deserialize, Serialize };
 use figment::{ Figment, providers::{ Format, Toml, Json, Env } };
 use once_cell::sync::OnceCell;
 
-
-// TODO: move to a config
-const PATH: &str = "C:\\Users\\almin\\Downloads";
 // Set the PATH to be used by the app, check first which OS I'm using and depending on that go to the Downloads folder
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -38,7 +35,7 @@ impl Config {
                 Folders {
                     name: "Application".to_string(),
                     path: "C:\\Users\\almin\\Downloads\\Application".to_string(),
-                    extensions: vec!["exe".to_string(), "msi".to_string()],
+                    extensions: vec!["exe".to_string(), "msi".to_string(), "dmg".to_string()],
                 },
                 Folders {
                     name: "Documents".to_string(),
@@ -127,7 +124,7 @@ fn create_folders() -> std::io::Result<Vec<(String, PathBuf)>> {
     let mut created_folders: Vec<(String, PathBuf)> = vec![];
 
     for folder in folders {
-        let folder_path = format!("{}\\{}", PATH, folder);
+        let folder_path = format!("{}\\{}", CONFIG.get().unwrap().base_path, folder);
         let path: &Path = Path::new(&folder_path);
         if !path.exists() {
             fs::create_dir(&folder_path)?;
@@ -145,24 +142,27 @@ fn move_files_to_folders(files: Vec<String>) {
     for file in files.iter() {
         let file_extension = Path::new(file).extension().expect("Unable to get file extension");
 
-        // find the file_extension in the CONFIG
-        let archive_folder = CONFIG.get().unwrap().folders.iter().find(|folder| {
-            folder
+        let folder_to_move = CONFIG.get().unwrap().folders.iter().find(|folder| {
+          folder
                 .extensions
                 .iter()
                 .any(|extension| extension.as_str() == file_extension)
         });
 
-        println!("FOLDER: {:?}", archive_folder);
+        if folder_to_move.is_none() {
+            continue;
+        }
 
-        // let file_name = Path::new(file).file_name().expect("Unable to get file name");
-        // let file_name = file_name.to_str().expect("Unable to convert file name to string");
-        // let file_path = format!(
-        //     "{}\\{}",
-        //     archive_folder.1.to_str().expect("Unable to convert archive folder path to string"),
-        //     file_name
-        // );
-        // fs::rename(file, file_path).expect("Unable to move file to archive folder");
+        let folder_path = folder_to_move.unwrap().path.clone();
+        let file_name = Path::new(file).file_name().expect("Unable to get file name");
+        let file_name = file_name.to_str().expect("Unable to convert file name to string");
+        let file_path = format!(
+            "{}\\{}",
+            folder_path,
+            file_name
+        );
+        fs::rename(file, file_path).expect("Unable to move file to archive folder");
+
 }
 }
 
