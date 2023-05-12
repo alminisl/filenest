@@ -21,12 +21,12 @@ fn greet(name: &str) -> String {
 struct Folders {
     name: String,
     path: String,
+    extensions: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {
     folders: Vec<Folders>,
-    extensions: Vec<String>,
     base_path: String,
 }
 
@@ -38,28 +38,33 @@ impl Config {
                 Folders {
                     name: "Application".to_string(),
                     path: "C:\\Users\\almin\\Downloads\\Application".to_string(),
+                    extensions: vec!["exe".to_string(), "msi".to_string()],
                 },
                 Folders {
                     name: "Documents".to_string(),
                     path: "C:\\Users\\almin\\Downloads\\Documents".to_string(),
+                    extensions: vec!["pdf".to_string(), "doc".to_string(), "docx".to_string()],
                 },
                 Folders {
                     name: "Media".to_string(),
                     path: "C:\\Users\\almin\\Downloads\\Media".to_string(),
+                    extensions: vec!["mp3".to_string(), "mp4".to_string(), "mkv".to_string()],
                 },
                 Folders {
                     name: "Images".to_string(),
                     path: "C:\\Users\\almin\\Downloads\\Images".to_string(),
+                    extensions: vec!["jpg".to_string(), "png".to_string(), "gif".to_string()],
                 },
                 Folders {
                     name: "Archive".to_string(),
                     path: "C:\\Users\\almin\\Downloads\\Archive".to_string(),
+                    extensions: vec!["zip".to_string(), "rar".to_string(), "gz".to_string()],
                 },
                 Folders {
                     name: "Other".to_string(),
                     path: "C:\\Users\\almin\\Downloads\\Other".to_string(),
+                    extensions: vec!["".to_string()],
                 }],
-            extensions: vec!["zip".to_string(), "rar".to_string(), "gz".to_string()],
             base_path: "C:\\Users\\almin\\Downloads".to_string(),
         }
     }
@@ -85,7 +90,7 @@ fn main() {
     // let currentOs = get_os();
     // println!("The operating system is: {}", currentOs);
 
-    move_files_to_folders(self::create_folders().unwrap().as_ref(), list_of_files);
+    move_files_to_folders(list_of_files);
 
     tauri::Builder
         ::default()
@@ -136,25 +141,29 @@ fn create_folders() -> std::io::Result<Vec<(String, PathBuf)>> {
     
 }
 
-fn move_files_to_folders(folders: &Vec<(String, PathBuf)>, files: Vec<String>) {
+fn move_files_to_folders(files: Vec<String>) {
     for file in files.iter() {
-        // Get files extension
         let file_extension = Path::new(file).extension().expect("Unable to get file extension");
-        if file_extension == "zip" || file_extension == "rar" || file_extension == "gz" {
-            let archive_folder = folders
+
+        // find the file_extension in the CONFIG
+        let archive_folder = CONFIG.get().unwrap().folders.iter().find(|folder| {
+            folder
+                .extensions
                 .iter()
-                .find(|(name, _)| name == "Archive")
-                .expect("Unable to find archive folder");
-            let file_name = Path::new(file).file_name().expect("Unable to get file name");
-            let file_name = file_name.to_str().expect("Unable to convert file name to string");
-            let file_path = format!(
-                "{}\\{}",
-                archive_folder.1.to_str().expect("Unable to convert archive folder path to string"),
-                file_name
-            );
-            fs::rename(file, file_path).expect("Unable to move file to archive folder");
-        }
-    }
+                .any(|extension| extension.as_str() == file_extension)
+        });
+
+        println!("FOLDER: {:?}", archive_folder);
+
+        // let file_name = Path::new(file).file_name().expect("Unable to get file name");
+        // let file_name = file_name.to_str().expect("Unable to convert file name to string");
+        // let file_path = format!(
+        //     "{}\\{}",
+        //     archive_folder.1.to_str().expect("Unable to convert archive folder path to string"),
+        //     file_name
+        // );
+        // fs::rename(file, file_path).expect("Unable to move file to archive folder");
+}
 }
 
 // TODO: Move this into a separate module 

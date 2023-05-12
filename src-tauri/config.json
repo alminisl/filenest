@@ -1,15 +1,1 @@
-{
-  "folders": [
-    {
-      "name": "Application",
-      "path": "C:\\Users\\almin\\Downloads\\Application"
-    },
-    { "name": "Documents", "path": "C:\\Users\\almin\\Downloads\\Documents" },
-    { "name": "Media", "path": "C:\\Users\\almin\\Downloads\\Media" },
-    { "name": "Images", "path": "C:\\Users\\almin\\Downloads\\Images" },
-    { "name": "Archive", "path": "C:\\Users\\almin\\Downloads\\Archive" },
-    { "name": "Other", "path": "C:\\Users\\almin\\Downloads\\Other" }
-  ],
-  "extensions": ["zip", "rar", "gz"],
-  "base_path": "C:\\Users\\almin\\Downloads"
-}
+{"folders":[{"name":"Application","path":"C:\\Users\\almin\\Downloads\\Application","extensions":["exe","msi"]},{"name":"Documents","path":"C:\\Users\\almin\\Downloads\\Documents","extensions":["pdf","doc","docx"]},{"name":"Media","path":"C:\\Users\\almin\\Downloads\\Media","extensions":["mp3","mp4","mkv"]},{"name":"Images","path":"C:\\Users\\almin\\Downloads\\Images","extensions":["jpg","png","gif"]},{"name":"Archive","path":"C:\\Users\\almin\\Downloads\\Archive","extensions":["zip","rar","gz"]},{"name":"Other","path":"C:\\Users\\almin\\Downloads\\Other","extensions":[""]}],"base_path":"C:\\Users\\almin\\Downloads"}
