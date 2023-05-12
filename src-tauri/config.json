@@ -1,1 +1,15 @@
-{}
+{
+  "folders": [
+    {
+      "name": "Application",
+      "path": "C:\\Users\\almin\\Downloads\\Application"
+    },
+    { "name": "Documents", "path": "C:\\Users\\almin\\Downloads\\Documents" },
+    { "name": "Media", "path": "C:\\Users\\almin\\Downloads\\Media" },
+    { "name": "Images", "path": "C:\\Users\\almin\\Downloads\\Images" },
+    { "name": "Archive", "path": "C:\\Users\\almin\\Downloads\\Archive" },
+    { "name": "Other", "path": "C:\\Users\\almin\\Downloads\\Other" }
+  ],
+  "extensions": ["zip", "rar", "gz"],
+  "base_path": "C:\\Users\\almin\\Downloads"
+}
