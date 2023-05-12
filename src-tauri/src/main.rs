@@ -6,7 +6,12 @@ use serde::{ Deserialize, Serialize };
 use figment::{ Figment, providers::{ Format, Toml, Json, Env } };
 use once_cell::sync::OnceCell;
 
+
 // Set the PATH to be used by the app, check first which OS I'm using and depending on that go to the Downloads folder
+
+
+
+// TODO: Figure out what OS im on and where the Download folder is
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -71,6 +76,8 @@ static CONFIG: OnceCell<Config> = OnceCell::new();
 
 
 fn main() {
+
+
     match get_config() {
         Ok(config) => {
             CONFIG.set(config).unwrap();
@@ -164,6 +171,14 @@ fn move_files_to_folders(files: Vec<String>) {
         fs::rename(file, file_path).expect("Unable to move file to archive folder");
 
 }
+}
+
+fn get_home_dir() {
+            match home::home_dir() {
+    Some(path) => println!("{}", path.display()),
+    None => println!("Impossible to get your home dir!"),
+}
+
 }
 
 // TODO: Move this into a separate module 
