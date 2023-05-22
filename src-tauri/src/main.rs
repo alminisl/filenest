@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{ path::{ Path, PathBuf }, fs::{ self, File }, error::Error };
+use std::{ path::{ Path, PathBuf }, fs::{ self, File }, error::Error, clone };
 use serde::{ Deserialize, Serialize };
 use figment::{ Figment, providers::{ Format, Toml, Json, Env } };
 use once_cell::sync::OnceCell;
@@ -12,20 +12,20 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct Folders {
     name: String,
     path: String,
     extensions: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct Config {
     folders: Vec<Folders>,
     base_path: String,
 }
 
-static CONFIG: OnceCell<Config> = OnceCell::new();
+// static CONFIG: Config;
 
 impl Config {
     fn default(base_path_dir: String) -> Config {
@@ -66,46 +66,35 @@ impl Config {
             base_path: base_path_dir,
         }
     }
-    fn update_config(&mut self, new_base_path_dir: String) {
-        let delimeter = if cfg!(windows) { "\\" } else { "/" };
-
-        for folder in self.folders.iter_mut() {
-            let old_path = folder.path.clone();
-
-            // Replace the old base path with the new one in the folder paths
-            let new_path = old_path.replace(&self.base_path, &new_base_path_dir);
-
-            // Replace the delimiter with the correct one for the current platform
-            let new_path = new_path.replace("/", delimeter).replace("\\", delimeter);
-
-            folder.path = new_path;
-        }
-
-        // Update the base path
-        self.base_path = new_base_path_dir;
-    }
 }
 
 fn main() {
+    let mut loaded_config: Option<Config> = None;
+
     match get_config() {
         Ok(config) => {
-            CONFIG.set(config).unwrap();
+            loaded_config = Some(config);
         }
         Err(e) => println!("Error running config manager: {:?}", e),
     }
 
-    let list_of_files = list_all_files_in_downloads();
-    let created_folders: Result<Vec<(String, PathBuf)>, std::io::Error> = create_folders();
-    if created_folders.is_err() {
-        println!("Error creating folders: {:?}", created_folders.err());
-    }
-    move_files_to_folders(list_of_files);
+    if let Some(config) = &loaded_config {
+        let list_of_files = list_all_files_in_downloads(config.clone());
+        let created_folders: Result<Vec<(String, PathBuf)>, std::io::Error> = create_folders(
+            config.clone()
+        );
+        if created_folders.is_err() {
+            println!("Error creating folders: {:?}", created_folders.err());
+        }
+        move_files_to_folders(list_of_files, config.clone());
 
-    //TODO: Test out updateConfig
-    let new_config: &Config = CONFIG.get().unwrap();
-    println!("{:?}", new_config);
-    new_config.base_path = "C:\\TEST".to_string();
-    println!("{:?}", new_config);
+        //TODO: Test out updateConfig
+        #[warn(unused_mut)]
+        let mut test_path = "C://test";
+        update_config(&mut config.clone(), test_path.to_string());
+    } else {
+        println!("Error: Config not loaded.");
+    }
 
     tauri::Builder
         ::default()
@@ -114,9 +103,9 @@ fn main() {
         .expect("error while running tauri application");
 }
 
-fn list_all_files_in_downloads() -> Vec<String> {
+fn list_all_files_in_downloads(config: Config) -> Vec<String> {
     let mut files = Vec::new();
-    let path_from_config: String = CONFIG.get().unwrap().base_path.clone();
+    let path_from_config: String = config.base_path.clone();
     let path = Path::new(path_from_config.as_str());
 
     for entry in fs::read_dir(path).expect("Unable to read dir") {
@@ -137,17 +126,21 @@ fn get_os() -> String {
     os.to_string()
 }
 
-fn create_folders() -> std::io::Result<Vec<(String, PathBuf)>> {
-    let folders = CONFIG.get()
-        .unwrap()
-        .folders.iter()
-        .map(|folder| folder.name.as_str());
+fn create_folders(config: Config) -> std::io::Result<Vec<(String, PathBuf)>> {
+    println!("Creating folders");
+    let folders = config.folders.iter().map(|folder| folder.name.as_str());
     let mut created_folders: Vec<(String, PathBuf)> = vec![];
-
+    println!("{:?}", folders);
     for folder in folders {
-        let folder_path = format!("{}\\{}", CONFIG.get().unwrap().base_path, folder);
+        let mut folder_path = PathBuf::new();
+        folder_path.push(config.base_path.clone());
+        folder_path.push(folder);
+
+        // let folder_path = format!("{}\\{}", CONFIG.get().unwrap().base_path, folder);
         let path: &Path = Path::new(&folder_path);
+        println!("Checking if folder exists: {}", path.to_str().unwrap());
         if !path.exists() {
+            println!("CREATING FOLDER {}", folder);
             fs::create_dir(&folder_path)?;
             created_folders.push((folder.to_string(), path.to_path_buf()));
         } else {
@@ -158,13 +151,34 @@ fn create_folders() -> std::io::Result<Vec<(String, PathBuf)>> {
     Ok(created_folders)
 }
 
-fn move_files_to_folders(files: Vec<String>) {
+fn update_config(config: &mut Config, new_base_path_dir: String) {
+    let delimeter = if cfg!(windows) { "\\" } else { "/" };
+
+    for folder in config.folders.iter_mut() {
+        let old_path = folder.path.clone();
+
+        // Replace the old base path with the new one in the folder paths
+        let new_path = old_path.replace(&config.base_path, &new_base_path_dir);
+
+        // Replace the delimiter with the correct one for the current platform
+        let new_path = new_path.replace("/", delimeter).replace("\\", delimeter);
+
+        folder.path = new_path;
+    }
+
+    // Update the base path
+    config.base_path = new_base_path_dir;
+}
+
+fn move_files_to_folders(files: Vec<String>, config: Config) {
     for file in files.iter() {
+        if Path::new(file).extension().is_none() {
+            continue;
+        }
         let file_extension = Path::new(file).extension().expect("Unable to get file extension");
 
-        let folder_to_move = CONFIG.get()
-            .unwrap()
-            .folders.iter()
+        let folder_to_move = config.folders
+            .iter()
             .find(|folder| {
                 folder.extensions.iter().any(|extension| extension.as_str() == file_extension)
             });
@@ -176,7 +190,13 @@ fn move_files_to_folders(files: Vec<String>) {
         let folder_path = folder_to_move.unwrap().path.clone();
         let file_name = Path::new(file).file_name().expect("Unable to get file name");
         let file_name = file_name.to_str().expect("Unable to convert file name to string");
-        let file_path = format!("{}\\{}", folder_path, file_name);
+
+        let mut file_path = PathBuf::new();
+        file_path.push(folder_path);
+        file_path.push(file_name);
+
+        println!("Moving file: {} to {}", file, file_path.display());
+
         fs::rename(file, file_path).expect("Unable to move file to archive folder");
     }
 }
@@ -217,9 +237,7 @@ fn get_config() -> Result<Config, Box<dyn Error>> {
     return Ok(config);
 }
 
-// function that accepts a new config and updates the current one in config.json
-fn update_config(config: Config) -> Result<(), Box<dyn Error>> {
-    let config_json = serde_json::to_string(&config).expect("Unable to serialize config to JSON");
-    fs::write("config.json", config_json).expect("Unable to write config to file");
-    Ok(())
+fn write_to_config() {
+    // Get the current config and then update the json file
+    let config_path = Path::new("config.json");
 }

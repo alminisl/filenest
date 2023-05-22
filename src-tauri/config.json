@@ -1,0 +1,35 @@
+{
+  "folders": [
+    {
+      "name": "Application",
+      "path": "/Users/almin/Downloads/Application",
+      "extensions": ["exe", "msi", "dmg"]
+    },
+    {
+      "name": "Documents",
+      "path": "/Users/almin/Downloads/Documents",
+      "extensions": ["pdf", "doc", "docx"]
+    },
+    {
+      "name": "Media",
+      "path": "/Users/almin/Downloads/Media",
+      "extensions": ["mp3", "mp4", "mkv"]
+    },
+    {
+      "name": "Images",
+      "path": "/Users/almin/Downloads/Images",
+      "extensions": ["jpg", "png", "gif"]
+    },
+    {
+      "name": "Archive",
+      "path": "/Users/almin/Downloads/Archive",
+      "extensions": ["zip", "rar", "gz"]
+    },
+    {
+      "name": "Other",
+      "path": "/Users/almin/Downloads/Other",
+      "extensions": [""]
+    }
+  ],
+  "base_path": "/Users/almin/Downloads"
+}
