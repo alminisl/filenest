@@ -12,6 +12,26 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[tauri::command]
+fn getBasePath() -> String {
+    let config = get_config().unwrap();
+    config.base_path
+}
+
+#[tauri::command]
+fn getFolders() -> Vec<String> {
+    let config: Config = get_config().unwrap();
+    let folders: Vec<&str> = config.folders
+        .iter()
+        .map(|folder: &Folders| folder.path.as_str())
+        .collect();
+
+    folders
+        .iter()
+        .map(|folder| folder.to_string())
+        .collect()
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Folders {
     name: String,
@@ -24,8 +44,6 @@ struct Config {
     folders: Vec<Folders>,
     base_path: String,
 }
-
-// static CONFIG: Config;
 
 impl Config {
     fn default(base_path_dir: String) -> Config {
@@ -89,16 +107,18 @@ fn main() {
         move_files_to_folders(list_of_files, config.clone());
 
         //TODO: Test out updateConfig
-        #[warn(unused_mut)]
-        let mut test_path = "C://test";
-        update_config(&mut config.clone(), test_path.to_string());
+        // #[warn(unused_mut)]
+        // let mut test_path = "C://test";
+        // let mut new_config = config.clone();
+        // new_config.base_path = test_path.to_string();
+        // update_config(&mut new_config);
     } else {
         println!("Error: Config not loaded.");
     }
 
     tauri::Builder
         ::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, getBasePath, getFolders])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -107,6 +127,7 @@ fn list_all_files_in_downloads(config: Config) -> Vec<String> {
     let mut files = Vec::new();
     let path_from_config: String = config.base_path.clone();
     let path = Path::new(path_from_config.as_str());
+    println!("Path: {}", path.display());
 
     for entry in fs::read_dir(path).expect("Unable to read dir") {
         let entry = entry.expect("Unable to get entry");
@@ -151,23 +172,8 @@ fn create_folders(config: Config) -> std::io::Result<Vec<(String, PathBuf)>> {
     Ok(created_folders)
 }
 
-fn update_config(config: &mut Config, new_base_path_dir: String) {
-    let delimeter = if cfg!(windows) { "\\" } else { "/" };
-
-    for folder in config.folders.iter_mut() {
-        let old_path = folder.path.clone();
-
-        // Replace the old base path with the new one in the folder paths
-        let new_path = old_path.replace(&config.base_path, &new_base_path_dir);
-
-        // Replace the delimiter with the correct one for the current platform
-        let new_path = new_path.replace("/", delimeter).replace("\\", delimeter);
-
-        folder.path = new_path;
-    }
-
-    // Update the base path
-    config.base_path = new_base_path_dir;
+fn update_config(new_config: &mut Config) {
+    write_to_config(new_config.clone());
 }
 
 fn move_files_to_folders(files: Vec<String>, config: Config) {
@@ -237,7 +243,15 @@ fn get_config() -> Result<Config, Box<dyn Error>> {
     return Ok(config);
 }
 
-fn write_to_config() {
+fn write_to_config(new_config: Config) {
     // Get the current config and then update the json file
     let config_path = Path::new("config.json");
+    let config_file = File::open(config_path).expect("Unable to open config file");
+    let config: Config = serde_json::from_reader(config_file).expect("Unable to parse config file");
+
+    let config_json = serde_json
+        ::to_string(&new_config)
+        .expect("Unable to serialize config to JSON");
+
+    fs::write("config.json", config_json).expect("Unable to write config to file");
 }

@@ -2,34 +2,34 @@
   "folders": [
     {
       "name": "Application",
-      "path": "/Users/almin/Downloads/Application",
+      "path": "/Users/isa1wi/Downloads/Application",
       "extensions": ["exe", "msi", "dmg"]
     },
     {
       "name": "Documents",
-      "path": "/Users/almin/Downloads/Documents",
+      "path": "/Users/isa1wi/Downloads/Documents",
       "extensions": ["pdf", "doc", "docx"]
     },
     {
       "name": "Media",
-      "path": "/Users/almin/Downloads/Media",
+      "path": "/Users/isa1wi/Downloads/Media",
       "extensions": ["mp3", "mp4", "mkv"]
     },
     {
       "name": "Images",
-      "path": "/Users/almin/Downloads/Images",
+      "path": "/Users/isa1wi/Downloads/Images",
       "extensions": ["jpg", "png", "gif"]
     },
     {
       "name": "Archive",
-      "path": "/Users/almin/Downloads/Archive",
+      "path": "/Users/isa1wi/Downloads/Archive",
       "extensions": ["zip", "rar", "gz"]
     },
     {
       "name": "Other",
-      "path": "/Users/almin/Downloads/Other",
+      "path": "/Users/isa1wi/Downloads/Other",
       "extensions": [""]
     }
   ],
-  "base_path": "/Users/almin/Downloads"
+  "base_path": "/Users/isa1wi/Downloads"
 }
