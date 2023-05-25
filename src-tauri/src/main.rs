@@ -19,17 +19,15 @@ fn getBasePath() -> String {
 }
 
 #[tauri::command]
-fn getFolders() -> Vec<String> {
+fn getFolders() -> Vec<Folders> {
     let config: Config = get_config().unwrap();
-    let folders: Vec<&str> = config.folders
-        .iter()
-        .map(|folder: &Folders| folder.path.as_str())
-        .collect();
+    config.folders
+}
 
-    folders
-        .iter()
-        .map(|folder| folder.to_string())
-        .collect()
+#[tauri::command]
+fn updateConfig(new_config: Config) {
+    println!("Updating config");
+    write_to_config(new_config);
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -118,7 +116,7 @@ fn main() {
 
     tauri::Builder
         ::default()
-        .invoke_handler(tauri::generate_handler![greet, getBasePath, getFolders])
+        .invoke_handler(tauri::generate_handler![greet, getBasePath, getFolders, updateConfig])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -244,6 +242,7 @@ fn get_config() -> Result<Config, Box<dyn Error>> {
 }
 
 fn write_to_config(new_config: Config) {
+    println!("Writing to config");
     // Get the current config and then update the json file
     let config_path = Path::new("config.json");
     let config_file = File::open(config_path).expect("Unable to open config file");
