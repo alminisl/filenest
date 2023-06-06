@@ -3,6 +3,7 @@
 
 use std::{ path::{ Path, PathBuf }, fs::{ self, File }, error::Error, clone };
 use serde::{ Deserialize, Serialize };
+use serde_json::Value;
 use figment::{ Figment, providers::{ Format, Toml, Json, Env } };
 use once_cell::sync::OnceCell;
 
@@ -14,7 +15,7 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 fn getBasePath() -> String {
-    let config = get_config().unwrap();
+    let config: Config = get_config().unwrap();
     config.base_path
 }
 
@@ -24,10 +25,20 @@ fn getFolders() -> Vec<Folders> {
     config.folders
 }
 
-#[tauri::command]
-fn updateConfig(new_config: Config) {
+#[tauri::command(rename_all = "snake_case")]
+fn updateConfig(invoke_message: String) {
     println!("Updating config");
-    write_to_config(new_config);
+    let config: Config = serde_json::from_str(&invoke_message).unwrap();
+    write_to_config(config);
+}
+
+#[tauri::command(rename_all = "snake_case")]
+fn sortItems() {
+    // Call the move_files_to_folders function
+    let config: Config = get_config().unwrap();
+    let list_of_files = list_all_files_in_downloads(config.clone());
+    move_files_to_folders(list_of_files, config.clone());
+    println!("Sorting items");
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -40,6 +51,7 @@ struct Folders {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Config {
     folders: Vec<Folders>,
+    #[serde(rename = "basePath")]
     base_path: String,
 }
 
@@ -103,20 +115,15 @@ fn main() {
             println!("Error creating folders: {:?}", created_folders.err());
         }
         move_files_to_folders(list_of_files, config.clone());
-
-        //TODO: Test out updateConfig
-        // #[warn(unused_mut)]
-        // let mut test_path = "C://test";
-        // let mut new_config = config.clone();
-        // new_config.base_path = test_path.to_string();
-        // update_config(&mut new_config);
     } else {
         println!("Error: Config not loaded.");
     }
 
     tauri::Builder
         ::default()
-        .invoke_handler(tauri::generate_handler![greet, getBasePath, getFolders, updateConfig])
+        .invoke_handler(
+            tauri::generate_handler![greet, getBasePath, getFolders, updateConfig, sortItems]
+        )
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

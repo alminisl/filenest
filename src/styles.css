@@ -4,8 +4,8 @@
   line-height: 24px;
   font-weight: 400;
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
+  color: #181825;
+  background-color: #1e1e2e;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,95 +15,158 @@
 }
 
 .container {
-  margin: 0;
-  padding-top: 10vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: 0.75s;
+.save-button {
+  margin-top: 10px;
+  background-color: #94e2d5;
+  margin-right: 10px;
 }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
+.save-button:hover {
+  background-color: #89b4fa;
+  transition: 0.7s;
 }
 
-.row {
+.folder-label {
+  margin-top: 5px;
+  text-align: start;
+}
+
+.input-container {
+  margin-bottom: 10px;
+}
+
+.input-background {
+  background-color: #313244;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  width: 40vw;
+  height: 15vh;
+  border-radius: 5px;
+  align-items: center;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  text-align: center;
+label {
+  display: block;
+  margin-bottom: 5px;
 }
 
 input,
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  font-size: 16px;
 }
 
-button {
-  cursor: pointer;
+.folder-input {
+  margin-top: 5px;
+  width: 30vw;
 }
 
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
+.folder-extensions {
+  width: 30vw;
 }
 
-input,
-button {
-  outline: none;
-}
-
-#greet-input {
-  margin-right: 5px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
+@media (min-width: 768px) {
+  .container {
+    padding: 5vh;
     color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
-
-  a:hover {
-    color: #24c8db;
+    background-color: #181825;
   }
 
   input,
   button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
+    padding: 12px 24px;
+  }
+
+  .logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: 0.75s;
+  }
+
+  .logo.tauri:hover {
+    filter: drop-shadow(0 0 2em #24c8db);
+  }
+
+  .row {
+    display: flex;
+    justify-content: center;
+  }
+
+  a {
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
+  }
+
+  a:hover {
+    color: #535bf2;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  input,
+  button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    color: #181825;
+    background-color: #ffffff;
+    transition: border-color 0.25s;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:hover {
+    border-color: #396cd8;
   }
   button:active {
-    background-color: #0f0f0f69;
+    border-color: #396cd8;
+    background-color: #e8e8e8;
+  }
+
+  input,
+  button {
+    outline: none;
+  }
+
+  #greet-input {
+    margin-right: 5px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color: #f6f6f6;
+      background-color: #181825;
+    }
+
+    a:hover {
+      color: #24c8db;
+    }
+
+    input,
+    button {
+      color: #ffffff;
+      background-color: #11111b;
+    }
+    button:active {
+      background-color: #181825;
+    }
   }
 }
